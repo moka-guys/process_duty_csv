@@ -6,6 +6,7 @@ Date Modified: 14/09/2022
 """
 import subprocess
 import os
+from os import path
 import re
 import collections
 from datetime import datetime
@@ -203,8 +204,10 @@ class Project:
             else:
                 path_to_RPKM = os.path.join(output_folder, "RPKM")
                 destination_of_Coverage = os.path.join(output_folder, "coverage")
-                os.mkdir(path_to_RPKM)
-                os.mkdir(destination_of_Coverage)
+                if not path.exists(path_to_RPKM):
+                    os.mkdir(path_to_RPKM)
+                if not path.exists(destination_of_Coverage):
+                    os.mkdir(destination_of_Coverage)
                 # import csv file to pandas df
                 csv_file = pandas.read_csv(file_path, index_col=None)
                 # get data frames from the master df
@@ -214,22 +217,33 @@ class Project:
                 # Create a folder with NGS run name, subfolders cold coverasge and RPKM, download data
                 results = re.search(r"\\(NGS\S+)$", output_folder)
                 foldername = results.group(1)
-                StG_transfer_folder = os.path.join(StG_transfer, foldername)
-                # Make directories in the outgoing folder
-                os.mkdir(StG_transfer_folder)
-                os.mkdir(os.path.join(StG_transfer_folder, "coverage"))
-                os.mkdir(os.path.join(StG_transfer_folder, "RPKM"))
+                # Find if any files are required for StG trasnfer
+                StGsearch = csv_file['url'].str.contains('StG').any()
+                if StGsearch:
+                    StG_transfer_folder = os.path.join(StG_transfer, foldername)
+                    # Make directories in the outgoing folder
+                    if not path.exists(StG_transfer_folder):
+                        os.mkdir(StG_transfer_folder)
+                    if not path.exists(os.path.join(StG_transfer_folder, "coverage")):
+                        os.mkdir(os.path.join(StG_transfer_folder, "coverage"))
+                    if not path.exists(os.path.join(StG_transfer_folder, "RPKM")):
+                        os.mkdir(os.path.join(StG_transfer_folder, "RPKM"))
+                    url_StG_RPKM = get_data(df_RPKM, '"{}"'.format(os.path.join(StG_transfer_folder, "RPKM")))
+                    url_StG_coverage = get_data(df_coverage, '"{}"'.format(os.path.join(StG_transfer_folder, "coverage")), 'StG')
                 # Download data for StG Transfer
                 url_RPKM = get_data(df_RPKM, '"{}"'.format(path_to_RPKM))
                 url_coverage = get_data(df_coverage, '"{}"'.format(destination_of_Coverage), "GSTT")
-                url_StG_RPKM = get_data(df_RPKM, '"{}"'.format(os.path.join(StG_transfer_folder, "RPKM")))
-                url_StG_coverage = get_data(df_coverage, '"{}"'.format(os.path.join(StG_transfer_folder, "coverage")), 'StG')
                 if len(df_FHPRS.index) >= 1 :
                     destination_of_FHPRS = os.path.join(output_folder, "FH_PRS")
-                    os.mkdir(destination_of_FHPRS)
-                    os.mkdir(os.path.join(StG_transfer_folder, "FH_PRS"))
-                    url_FHPRS = get_data(df_FHPRS, '"{}"'.format(destination_of_FHPRS), 'GSTT')
-                    url_StG_FHPRS = get_data(df_FHPRS, '"{}"'.format(os.path.join(StG_transfer_folder, "FH_PRS")), 'StG')
+                    if not path.exists(destination_of_FHPRS):
+                        os.mkdir(destination_of_FHPRS)
+                    if StGsearch:
+                        if not path.exists(os.path.join(StG_transfer_folder, "FH_PRS")):
+                            os.mkdir(os.path.join(StG_transfer_folder, "FH_PRS"))
+                        url_StG_FHPRS = get_data(df_FHPRS, '"{}"'.format(os.path.join(StG_transfer_folder, "FH_PRS")), 'StG')
+                    else:
+                        url_StG_FHPRS = ''
+                    url_FHPRS = get_data(df_FHPRS, '"{}"'.format(destination_of_FHPRS), 'GSTT') 
                 else:
                     url_FHPRS = ''
                     url_StG_FHPRS = ''
