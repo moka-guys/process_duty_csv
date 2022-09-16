@@ -274,7 +274,7 @@ class Project:
             print(output)
     def archive_files(self):
         """
-        Modify the csv file to remove data from it and insert a message of when it was compelted and by whome.
+        Modify the csv file to remove data from it and insert a message of when it was compelted.
         """
         # get the user infromation and current date
         #user = os.getlogin() -> does not work when executing the script from PowerShell
