@@ -3,7 +3,7 @@ if debug:
     # Read location:
     CSVread_folder = "H:\\Tickets\\automate_end_of_duty_tasks\\CSV"
     # MokaPipe:
-    MokaPipe_path_worksheets = "H:\\Tickets\\automate_end_of_duty_tasks\\Results\\"
+    MokaPipe_path_worksheets = "H:\\Tickets\\automate_end_of_duty_tasks\\Results"
     # SNP:
     SNP_destination_of_VCFs = "H:\\Tickets\\TEST\\VCFs_Andrew"
     # TSO:
@@ -17,7 +17,7 @@ else:
     # Read location:
     CSVread_folder = "P:\\Bioinformatics\\Duty_Bioinformatics_CSV"
     # MokaPipe:
-    MokaPipe_path_worksheets = "P:\\DNA LAB\\Current\\NGS worksheets\\"
+    MokaPipe_path_worksheets = "P:\\DNA LAB\\Current\\NGS worksheets"
     # SNP:
     SNP_destination_of_VCFs = "P:\\Bioinformatics\\VCFs_Andrew"
     # TSO:
