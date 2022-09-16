@@ -39,7 +39,7 @@ def ask_for_folder():
             output_folder = ""
     return os.path.join(path_worksheets, output_folder)
 
-def get_data(df, path_to_folder, site_filter):
+def get_data(df, path_to_folder, site_filter='none'):
     """
     This function reads the data frame (df)..
     From the df file it obtains the download links and creates a string argument.
@@ -159,7 +159,7 @@ class Project:
             csv_file = pandas.read_csv(file_path, index_col=None) 
             # extracts urls from the df and creates a string with the download url and \
             #  destination path for the downloaded file:
-            url_wes = get_data(csv_file, '"{}"'.format(config.WES_destination_of_files), "none") 
+            url_wes = get_data(csv_file, '"{}"'.format(config.WES_destination_of_files)) 
             # download the file using the url into the destination folder and \
             # capture output from Powershell using Subprocess to be saved to a logfile:
             output = download_data(url_wes)
@@ -174,7 +174,7 @@ class Project:
         """
         for file_path in self.project_files:
             csv_file = pandas.read_csv(file_path, index_col=None)
-            url_snp = get_data(csv_file, '"{}"'.format(config.SNP_destination_of_VCFs), "none")
+            url_snp = get_data(csv_file, '"{}"'.format(config.SNP_destination_of_VCFs))
             output = download_data(url_snp)
             list_of_stings = file_path.split("\\")
             save_log_file(output, list_of_stings[-1].replace('.csv','.txt'))
@@ -220,9 +220,9 @@ class Project:
                 os.mkdir(os.path.join(StG_transfer_folder, "coverage"))
                 os.mkdir(os.path.join(StG_transfer_folder, "RPKM"))
                 # Download data for StG Transfer
-                url_RPKM = get_data(df_RPKM, '"{}"'.format(path_to_RPKM), "none")
+                url_RPKM = get_data(df_RPKM, '"{}"'.format(path_to_RPKM))
                 url_coverage = get_data(df_coverage, '"{}"'.format(destination_of_Coverage), "GSTT")
-                url_StG_RPKM = get_data(df_RPKM, '"{}"'.format(os.path.join(StG_transfer_folder, "RPKM")),'none')
+                url_StG_RPKM = get_data(df_RPKM, '"{}"'.format(os.path.join(StG_transfer_folder, "RPKM")))
                 url_StG_coverage = get_data(df_coverage, '"{}"'.format(os.path.join(StG_transfer_folder, "coverage")), 'StG')
                 if len(df_FHPRS.index) >= 1 :
                     destination_of_FHPRS = os.path.join(output_folder, "FH_PRS")
@@ -264,9 +264,9 @@ class Project:
             os.mkdir(path_to_folder)
             os.mkdir(destination_of_Coverage)
             os.mkdir(destination_of_extracted_Results)
-            url_coverage = get_data(df_coverage, '"{}"'.format(destination_of_Coverage), 'none')
-            url_sompy = get_data(df_sompy, '"{}"'.format(destination_of_sompy), 'none')
-            url_results = get_data(df_results, '"{}"'.format(path_to_folder), 'none')
+            url_coverage = get_data(df_coverage, '"{}"'.format(destination_of_Coverage))
+            url_sompy = get_data(df_sompy, '"{}"'.format(destination_of_sompy))
+            url_results = get_data(df_results, '"{}"'.format(path_to_folder))
             all_url = url_coverage + url_sompy + url_results
             output = download_data(all_url)
             list_of_stings = file_path.split("\\")
