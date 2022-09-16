@@ -230,6 +230,9 @@ class Project:
                         os.mkdir(os.path.join(StG_transfer_folder, "RPKM"))
                     url_StG_RPKM = get_data(df_RPKM, '"{}"'.format(os.path.join(StG_transfer_folder, "RPKM")))
                     url_StG_coverage = get_data(df_coverage, '"{}"'.format(os.path.join(StG_transfer_folder, "coverage")), 'StG')
+                else:
+                    url_StG_RPKM = ''
+                    url_StG_coverage = ''
                 # Download data for StG Transfer
                 url_RPKM = get_data(df_RPKM, '"{}"'.format(path_to_RPKM))
                 url_coverage = get_data(df_coverage, '"{}"'.format(destination_of_Coverage), "GSTT")
