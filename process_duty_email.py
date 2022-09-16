@@ -144,13 +144,13 @@ class Project:
         This function executes the processing of a project based on the project type e.g. SNP, WES, TSO500 or MokaPipe
         """
         if self.project == "WES":
-            self.process_WES(self)
+            self.process_WES()
         elif self.project == "SNP":
-            self.process_SNP(self)
+            self.process_SNP()
         elif self.project == "TSO500":
-            self.process_TSO(self)
+            self.process_TSO()
         elif self.project == "MokaPipe":
-            self.process_MokaPipe(self)
+            self.process_MokaPipe()
     def process_WES(self):
         """
         Process WES Runs
