@@ -21,7 +21,7 @@ Start-BitsTransfer -Source $path -Destination $output
 # Check if the url contains the Results.zip file.
 # If yes then it will unzip the file and then delete the zipped file.
 if ($path.Contains("/Results.zip")) {
-    $filetoextract=$path
+    $filetoextract=$output+"\Results.zip"
     $extractpath=$output+"\Results"
     Unzip $filetoextract $extractpath
     Remove-Item $filetoextract
