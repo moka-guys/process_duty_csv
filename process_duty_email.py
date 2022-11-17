@@ -268,7 +268,7 @@ class Project:
             df_results = csv_file[csv_file['type'] == 'Results']
             df_coverage = csv_file[csv_file['type'] == 'coverage']
             df_sompy = csv_file[csv_file['type'] == 'sompy']
-            search_results1 = re.search(r"_(TSO\d+).csv", file_path)
+            search_results1 = re.search(r"_(TSO\S+).csv", file_path)
             search_results2 = re.search(r"002(_\S+)_TSO", file_path)
             folder_name = "{}{}{}".format(
             search_results1.group(1),search_results2.group(1),"_AUTOMATE_DUTY_TEST"
