@@ -43,7 +43,6 @@ S:\Genetics_Data2\Array\Software\Python-3.6.5\python S:\Genetics_Data2\Array\Sof
 ~~~
 
 # Developers
-Igor Malashchuk <br />
-STP Trainee in Clinical Bioinformatics <br />
+Bioinformatics Team, Genomics <br />
 Guy's and St Thomas's NHS Trust <br />
-Sign off date: 14 September 2022
+Sign off date: 17/11/2022
