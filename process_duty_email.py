@@ -1,8 +1,8 @@
 """
 Process duty emails
-Developer: Igor Malashchuk 
+Developers: Bioinformaics Team - Guy's Hospital
 Email: igor.malashchuk@nhs.net
-Date Modified: 14/09/2022
+Date Modified: 17/11/2022
 """
 import subprocess
 import os
@@ -17,7 +17,7 @@ import config
 
 # Run script in Powershell: duty
 # run script in command prompt: S:\Genetics_Data2\Array\Software\Python-3.6.5\python S:\Genetics_Data2\Array\Software\duty_bioinformatician_scripts\process_duty_email.py
-version = "1.0.0"
+version = "1.0.1"
 
 separator = "£$%"
 
