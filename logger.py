@@ -11,17 +11,16 @@ import config
 class Logger(object):
     """Simple logging class
 
-    shutdown_logs()
-        To prevent duplicate filehandlers and system handlers close and
-        remove all handlers for all log files that have a python logging object
-    _get_file_handler()
-        Returns the FileHandler associated with the logging object
-    _get_syslog_handler()
-        Returns the SysLogHandler associated with the logging object
-    _get_stream_handler()
-        Returns the StreamHandler associated with the logging object
-    get_logger()
-        Return a Python logging object
+    Methods
+        shutdown_logs()
+            To prevent duplicate filehandlers and system handlers close and
+            remove all handlers for all log files with a python logging object
+        _get_file_handler()
+            Returns the FileHandler associated with the logging object
+        _get_stream_handler()
+            Returns the StreamHandler associated with the logging object
+        get_logger()
+            Return a Python logging object
     """
 
     _formatter = logging.Formatter(
