@@ -1,7 +1,9 @@
 """ Config file for process_duty_csv
 """
+import datetime
 
 LOGGING_FORMATTER = "%(asctime)s - %(levelname)s - %(message)s"
+TIMESTAMP = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
 # Folder that the CSV file will be located in
 CSV_FOLDER = {
@@ -11,9 +13,9 @@ CSV_FOLDER = {
 
 # Logfile subdirs
 DIRS = {
-    "ARCHIVE": "%s/archive/",
-    "CMDS": "%s/cmds_logs/",
-    "LOGS": "%s/process_logs/",
+    "ARCHIVE": "%sarchive/",
+    "CMDS": "%scmds_logs/",
+    "LOGS": "%sprocess_logs/",
 }
 
 WORKSHEETS_DIR_LABEL = (
