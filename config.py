@@ -1,41 +1,28 @@
-debug=False
-if debug:
-    # Read location:
-    CSVread_folder = "H:\\Tickets\\automate_end_of_duty_tasks\\CSV"
-    # MokaPipe:
-    MokaPipe_path_worksheets = "H:\\Tickets\\automate_end_of_duty_tasks\\Results"
-    # SNP:
-    SNP_destination_of_VCFs = "H:\\Tickets\\TEST\\VCFs_Andrew"
-    # TSO:
-    TSO_destination_of_Results = 'H:\\Tickets\\automate_end_of_duty_tasks\\Results'
-    # WES:
-    WES_destination_of_files = "H:\\Tickets\\TEST\\genesumarries"
-    # St George's transfer folder:
-    StG_transfer = 'H:\\Tickets\\automate_end_of_duty_tasks\\Results\\StG_outgoing'
+""" Config file for process_duty_csv
+"""
+import datetime
 
-else:
-    # Read location:
-    CSVread_folder = "P:\\Bioinformatics\\Duty_Bioinformatics_CSV"
-    # MokaPipe:
-    MokaPipe_path_worksheets = "P:\\DNA LAB\\Current\\NGS worksheets"
-    # SNP:
-    SNP_destination_of_VCFs = "P:\\Bioinformatics\\VCFs_Andrew"
-    # TSO:
-    # TSO_destination_of_Results = "P:\\Cancer_Genetics\\TSO500\\Results"
-    TSO_destination_of_Results = "S:\\Genetics_Data2\\TSO500"
-    # WES:
-    WES_destination_of_files = "S:\\Genetics\\Bioinformatics\\NGS\\depthofcoverage\\genesummaries"
-    # St George's transfer folder:
-    StG_transfer = "P:\\DNA LAB\\StG SFTP\\StG SFTP outgoing"
+LOGGING_FORMATTER = "%(asctime)s - %(levelname)s - %(message)s"
+TIMESTAMP = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 
+# Folder that the CSV file will be located in
+CSV_FOLDER = {
+    "TEST": "P:/Bioinformatics/testing/process_duty_csv/",
+    "PROD": "P:/Bioinformatics/Duty_Bioinformatics_CSV/",
+}
 
+# Logfile subdirs
+DIRS = {
+    "ARCHIVE": "%sarchive/",
+    "CMDS": "%scmds_logs/",
+    "LOGS": "%sprocess_logs/",
+}
 
-
-
-
-
-
-
-
-
-
+WORKSHEETS_DIR_LABEL = (
+    "Please input the NGS worksheets runfolder directory without "
+    "quotation marks, e.g.: NGS_501 to 600"
+)
+RUNFOLDER_DIR_LABEL = (
+    "Please input the final part of the destination folder without "
+    "quotation marks, e.g.: NGS451 or TSO12345"
+)
