@@ -7,12 +7,12 @@ import sys
 import subprocess
 import os
 import tkinter as tk
-from ast import literal_eval
 from tkinter import filedialog
 import argparse
+import logging
+from typing import Tuple
 import pandas as pd
 import config
-import logging
 from logger import Logger
 
 
@@ -446,9 +446,9 @@ def arg_parse() -> dict:
     parser.add_argument(
         "-T",
         "--testing",
-        type=bool,
+        action="store_true",
+        help="Test mode",
         default=False,
-        help="Script mode",
         required=False,
     )  # Optional arg
     return vars(parser.parse_args())
@@ -487,13 +487,15 @@ def get_csv_path(script_mode: str) -> str:
         return csv_path
 
 
-def get_logger(logfile_path: str) -> tuple[logger.Logger, logging.Logger]:
+def get_logger(logfile_path: str) -> Tuple[Logger, logging.Logger]:
     """
     Get logger object and logger
-        :return logger_obj(class):  Logger() class object from logger submodule
-        :return logger(class):      Logger object from logging module
+        :return logger_obj (class): Logger() class object from logger submodule
+        :return logger (class):     Logger object from logging module
     """
-    return Logger(logfile_path), logger_obj.logger
+    logger_obj = Logger(logfile_path)
+    logger = logger_obj.logger
+    return logger_obj, logger
 
 
 if __name__ == "__main__":
