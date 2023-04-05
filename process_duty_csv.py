@@ -78,7 +78,7 @@ class ProcessCSV:
         self.complete_gstt_paths()
         self.download_cmds = self.create_download_commands()
         self.unzip_cmds, self.zipfiles_list = self.create_unzip_commands()
-        self.create_dirs()
+        self.create_dirs(self.dataframe)
         self.write_cmds_to_file()
         self.download_data()
         self.remove_zipfiles()
@@ -130,12 +130,21 @@ class ProcessCSV:
                 ].str.replace(r"%s%s", rf"{worksheets_dir}/{runfolder_dir}")
             # Only requires a single subdirectory input (runfolder name)
             if self.dataframe["GSTT_dir"].str.contains(r"/%s/").any():
+                # Collect indices of rows for which a subdirectory will need to
+                # be created
+                df_indices = self.dataframe.index[
+                    self.dataframe["GSTT_dir"].astype(str).str.contains(r"%s")
+                ]
                 # If runfolder_dir has already been collected don't open
                 # another message box
                 if "runfolder_dir" in locals():
                     self.dataframe["GSTT_dir"] = self.dataframe[
                         "GSTT_dir"
                     ].str.replace(r"%s", runfolder_dir)
+                    # Create subdirectories
+                    self.create_dirs(
+                        self.dataframe.iloc[df_indices].drop_duplicates()
+                    )
                 else:
                     self.logger.info("Getting runfolder subdir")
                     runfolder_dir = self.collect_tkinter_var(
@@ -145,8 +154,12 @@ class ProcessCSV:
                     self.dataframe["GSTT_dir"] = self.dataframe[
                         "GSTT_dir"
                     ].str.replace(r"%s", runfolder_dir)
+                    # Create subdirectories
+                    self.create_dirs(
+                        self.dataframe.iloc[df_indices].drop_duplicates()
+                    )
             else:
-                logger.info("No user input of subdirectories is required")
+                self.logger.info("No user input of subdirectories is required")
         except Exception as exception:
             logger.error(
                 "%s was raised when completing "
@@ -260,12 +273,12 @@ class ProcessCSV:
             )
             sys.exit(1)
 
-    def create_dirs(self) -> None:
+    def create_dirs(self, dataframe) -> None:
         """
         Create subdirectories specified in the dataframe if they
         don't already exist
         """
-        for directory in self.dataframe["GSTT_dir"]:
+        for directory in dataframe["GSTT_dir"]:
             if not os.path.exists(directory):
                 try:
                     os.mkdir(directory)
