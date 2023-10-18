@@ -257,9 +257,8 @@ class ProcessCSV:
         """
         try:
             with open(self.cmds_filepath, "w+", encoding="utf-8") as file:
-                for cmd_list in self.download_cmds, self.unzip_cmds:
-                    for cmd in cmd_list:
-                        file.write(f"{cmd}\n")
+                for cmd in self.download_cmds:
+                    file.write(f"{cmd}\n")
         except Exception as exception:
             self.logger.error(
                 "%s was raised when writing powershell commands "
@@ -274,9 +273,8 @@ class ProcessCSV:
         """
         Set off each command in self.command_list as a child process
         """
-        for cmd_list in self.download_cmds, self.unzip_cmds:
-            for cmd in cmd_list:
-                self.run_process(cmd)
+        for cmd in self.download_cmds:
+            self.run_process(cmd)
         self.logger.info("All commands executed without error")
 
     def run_process(self, command: str) -> None:
