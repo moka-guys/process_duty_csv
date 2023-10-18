@@ -37,8 +37,6 @@ class ProcessCSV:
             download command for that file. Append to download commands list
         valid_path()
             Validation of path using os
-        create_unzip_commands()
-            Generate unzip commands and list of GSTT paths to zip files
         create_dirs()
             Create subdirectories specified in the dataframe if they
             don't already exist
@@ -49,8 +47,6 @@ class ProcessCSV:
         run_process()
             Execute command as child process using os.system()
             and communicate output
-        remove_zipfiles()
-            Remove any runfolder-associated zip files from the Trust network
         archive_csv()
             Move the CSV file and logfile to the archive folder
     """
@@ -77,11 +73,9 @@ class ProcessCSV:
         logger.info("The commands logfile path is %s", self.cmds_filepath)
         self.complete_gstt_paths()
         self.download_cmds = self.create_download_commands()
-        self.unzip_cmds, self.zipfiles_list = self.create_unzip_commands()
         self.create_dirs(self.dataframe)
         self.write_cmds_to_file()
         self.download_data()
-        self.remove_zipfiles()
         # Files will only archive if other methods have completed successfully
         self.archive_csv()
         logger.info("Script has completed successfully")
@@ -235,44 +229,6 @@ class ProcessCSV:
             self.logger.error("Path does not exist on this system: %s", path)
             sys.exit(1)
 
-    def create_unzip_commands(self) -> list:
-        """
-        Generate unzip commands and list of GSTT paths to zip files
-            :return unzip_cmds(list): Powershell unzip commands
-            :return zip_files(list): List of GSTT paths to zip files
-        """
-        try:
-            unzip_cmds = []
-            zipfiles_list = []
-            # Drop rows that aren't a zip file
-            zip_files = self.dataframe[
-                self.dataframe["Url"].str.contains(".zip")
-            ]
-            if not zip_files.empty:
-                unzip_cmds = (
-                    "powershell Add-Type "
-                    + "-AssemblyName System.IO.Compression.FileSystem; "
-                    + "[System.IO.Compression.ZipFile]::ExtractToDirectory('"
-                    + zip_files["GSTT_dir"]
-                    + zip_files["Url"].str.split("/").str[-1]
-                    + "','"
-                    + zip_files["GSTT_dir"]
-                    + "')"
-                ).tolist()
-                zipfiles_list = (
-                    zip_files["GSTT_dir"]
-                    + zip_files["Url"].str.split("/").str[-1]
-                ).tolist()
-            return unzip_cmds, zipfiles_list
-        except Exception as exception:
-            self.logger.error(
-                "%s was raised when creating the powershell "
-                "file unzip commands commands: %s",
-                type(exception).__name__,
-                exception,
-            )
-            sys.exit(1)
-
     def create_dirs(self, dataframe) -> None:
         """
         Create subdirectories specified in the dataframe if they
@@ -301,9 +257,8 @@ class ProcessCSV:
         """
         try:
             with open(self.cmds_filepath, "w+", encoding="utf-8") as file:
-                for cmd_list in self.download_cmds, self.unzip_cmds:
-                    for cmd in cmd_list:
-                        file.write(f"{cmd}\n")
+                for cmd in self.download_cmds:
+                    file.write(f"{cmd}\n")
         except Exception as exception:
             self.logger.error(
                 "%s was raised when writing powershell commands "
@@ -318,9 +273,8 @@ class ProcessCSV:
         """
         Set off each command in self.command_list as a child process
         """
-        for cmd_list in self.download_cmds, self.unzip_cmds:
-            for cmd in cmd_list:
-                self.run_process(cmd)
+        for cmd in self.download_cmds:
+            self.run_process(cmd)
         self.logger.info("All commands executed without error")
 
     def run_process(self, command: str) -> None:
@@ -361,14 +315,6 @@ class ProcessCSV:
                     type(exception).__name__,
                     exception,
                 )
-
-    def remove_zipfiles(self):
-        """
-        Remove any runfolder-associated zip files from the Trust network
-        """
-        if self.zipfiles_list:
-            for zipfile in self.zipfiles_list:
-                os.remove(zipfile)
 
     def archive_csv(self) -> None:
         """
